@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.hainmc.cslsns.mapper.UserMapper">
+
+	<resultMap type="cn.edu.hainmc.cslsns.model.FileInfo"
+		id="userMap">
+		<id property="id" column="id" />
+		<result property="userName" column="user_name" />
+		<result property="firstName" column="first_name" />
+		<result property="lastName" column="last_name" />
+		<result property="fullName" column="full_name" />
+		<result property="userPassword" column="user_password" />
+		<result property="userEmail" column="user_email" />
+		<result property="userProfle" column="user_profile" />
+		<result property="userType" column="user_type" />		
+		<result property="creationDate" column="creation_date"
+			jdbcType="TIMESTAMP" />
+		<result property="createdBy" column="created_by" />
+		<result property="lastUpdateDate" column="last_update_date"
+			jdbcType="TIMESTAMP" />
+		<result property="lastUpdatedBy" column="last_updated_by" />
+		<result property="lastLoginDate" column="last_login_date"
+			jdbcType="TIMESTAMP" />
+		<result property="lastUpdateLogin" column="last_update_login" />
+	</resultMap>
+
+	<parameterMap type="cn.edu.hainmc.cslsns.model.FileInfo"
+		id="FileInfo" />
+
+	<sql id="Base_Column_List">
+		id, file_name, file_ext, file_path, file_size, creation_date, created_by, last_update_date, last_updated_by, last_login_date, last_update_login
+	</sql>
+
+	<insert id="create" useGeneratedKeys="true"
+		keyProperty="fileInfo.id">
+		INSERT INTO file_info(file_name, file_ext, file_path, file_size, created_by) 
+		VALUES (#{fileInfo.fileName},#{fileInfo.fileExt},#{fileInfo.filePath},#{fileInfo.fileSize},#{fileInfo.createdBy})
+	</insert>
+
+	<select id="findAll" resultMap="fileInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		file_info
+	</select>
+
+	<select id="findById" resultMap="fileInfoMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		file_info
+		where id=#{id}
+	</select>
+	<update id="update"
+		parameterType="cn.edu.hainmc.cslsns.model.FileInfo">
+		update file_info
+		<set>
+			<if test="fileInfo.fileName!=null and fileINfo.fileName!=''">
+				file_name= #{fileInfo.fileName},
+			</if>
+			<if test="fileInfo.fileExt!=null and fileINfo.fileExt!=''">
+				file_ext= #{fileInfo.fileExt},
+			</if>
+			
+			<if test="fileInfo.filePath!=null and fileINfo.filePath!=''">
+				file_path= #{fileInfo.filePath},
+			</if>
+			
+			<if test="fileInfo.fileSize!=null and fileINfo.fileSize!=0">
+				file_size= #{fileInfo.fileSize},
+			</if>
+			<if test="fileInfo.lastUpdateDate!=null">
+				last_update_date
+				=#{fileInfo.lastUpdateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="fileInfo.lastUpdatedBy!=null">
+				last_updated_by = #{fileInfo.lastUpdatedBy},
+			</if>		
+			
+		</set>
+		where id =#{fileInfo.id}
+	</update>
+
+	<delete id="delete"
+		parameterType="cn.edu.hainmc.cslsns.model.FileInfo">
+		delete from file_info
+		where id =#{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+					"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.hainmc.cslsns.mapper.UserMapper">
+
+	<resultMap type="cn.edu.hainmc.cslsns.model.User"
+		id="userMap">
+		<id property="id" column="id" />
+		<result property="userName" column="user_name" />
+		<result property="firstName" column="first_name" />
+		<result property="lastName" column="last_name" />
+		<result property="fullName" column="full_name" />
+		<result property="userPassword" column="user_password" />
+		<result property="userEmail" column="user_email" />
+		<result property="userProfle" column="user_profile" />
+		<result property="userType" column="user_type" />
+		<result property="creationDate" column="creation_date"
+			jdbcType="TIMESTAMP" />
+		<result property="createdBy" column="created_by" />
+		<result property="lastUpdateDate" column="last_update_date"
+			jdbcType="TIMESTAMP" />
+		<result property="lastUpdatedBy" column="last_updated_by" />
+		<result property="lastLoginDate" column="last_login_date"
+			jdbcType="TIMESTAMP" />
+		<result property="lastUpdateLogin" column="last_update_login" />
+	</resultMap>
+
+	<parameterMap type="cn.edu.hainmc.cslsns.model.User"
+		id="User" />
+
+	<sql id="Base_Column_List">
+		id, user_name, first_name, last_name,
+		full_name,user_password, user_email, user_profile,
+		user_type,
+		creation_date, created_by, last_update_date,last_updated_by,
+		last_login_date, last_update_login
+	</sql>
+
+	<insert id="create" useGeneratedKeys="true"
+		keyProperty="user.id">
+		insert into
+		sys_user(user_name,first_name,last_name,full_name,user_password,user_email,user_profile,user_type,created_by)
+		values(#{user.userName},#{user.firstName},#{user.lastName},#{user.fullName},#{user.userPassword},#{user.userEmail},#{user.userProfile},
+		#{user.userType},#{user.createdBy})
+	</insert>
+
+	<select id="findAll" resultMap="userMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		sys_user
+	</select>
+
+	<select id="findById" resultMap="userMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		sys_user
+		where id=#{id}
+	</select>
+
+	<select id="login" resultMap="userMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		sys_user
+		where user_name=#{user.userName} and
+		user_password=#{user.userPassword}
+	</select>
+
+	<update id="update"
+		parameterType="cn.edu.hainmc.cslsns.model.User">
+		update sys_user
+		<set>
+			<if test="user.userName!=null and user.userName!=''">
+				user_name= #{user.userName},
+			</if>
+			<if test="user.firstName!=null and user.firstName!=''">
+				first_name= #{user.firstName},
+			</if>
+			<if test="user.lastName!=null and user.lastName!=''">
+				last_name= #{user.lastName},
+			</if>
+			<if test="user.fullName!=null and user.fullName!=''">
+				full_name= #{user.fullName},
+			</if>
+			<if test="user.userPassword!=null and user.userPassword!=''">
+				user_password=#{user.userPassword},
+			</if>
+			<if test="user.userEmail!=null and user.userEmail!=''">
+				user_email=#{user.userEmail},
+			</if>
+			<if test="user.userProfile!=null and user.userProfile!=''">
+				user_profile=#{user.userProfile},
+			</if>
+			<if test="user.lastUpdateDate!=null">
+				last_update_date
+				=#{user.lastUpdateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="user.lastUpdatedBy!=null">
+				last_updated_by = #{user.lastUpdatedBy},
+			</if>
+		</set>
+		where id =#{user.id}
+	</update>
+
+	<delete id="delete"
+		parameterType="cn.edu.hainmc.cslsns.model.User">
+		delete from sys_user
+		where id =#{id}
+	</delete>
+
+</mapper>
